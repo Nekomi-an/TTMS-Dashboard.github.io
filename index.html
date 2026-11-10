@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Tracker 2026 - TTMS Interactive Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font - Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Prompt', sans-serif; }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-4 md:p-6 antialiased">
+    <div class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- Header Section -->
+        <header class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-xl relative overflow-hidden">
+            <div class="absolute -right-10 -top-10 w-40 h-40 bg-sky-500/10 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="z-10">
+                <div class="flex items-center gap-3">
+                    <span class="p-2.5 bg-sky-500/10 text-sky-400 rounded-xl border border-sky-500/20 text-xl">
+                        <i class="fa-solid fa-bolt"></i>
+                    </span>
+                    <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-sky-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">
+                        HEALTH TRACKER 2026: TTMS REPORTING
+                    </h1>
+                </div>
+                <p class="text-slate-400 text-sm mt-1.5 flex items-center gap-2">
+                    <i class="fa-solid fa-location-dot text-rose-400"></i>
+                    สรุปมอนิเตอร์การส่งข้อมูลแพทย์แผนไทย (นวด/อบ/ประคบ/หลังคลอด) อ.ขุนหาญ (20 แห่ง)
+                </p>
+            </div>
+            <div class="flex items-center gap-3 z-10">
+                <div class="bg-slate-800 border border-slate-700/60 text-slate-300 px-4 py-2 rounded-xl text-xs font-medium flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    ปีงบประมาณ 2569
+                </div>
+            </div>
+        </header>
+
+        <!-- Executive KPI Cards -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl flex items-center gap-4 hover:border-sky-500/40 transition-all duration-300 shadow-lg group">
+                <div class="text-2xl p-3.5 bg-sky-500/10 text-sky-400 rounded-2xl group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-hospital"></i>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-sky-400">20 แห่ง</div>
+                    <div class="text-xs text-slate-400 font-medium">หน่วยบริการในเครือข่าย</div>
+                </div>
+            </div>
+            
+            <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl flex items-center gap-4 hover:border-emerald-500/40 transition-all duration-300 shadow-lg group">
+                <div class="text-2xl p-3.5 bg-emerald-500/10 text-emerald-400 rounded-2xl group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-fire"></i>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-emerald-400">100%</div>
+                    <div class="text-xs text-slate-400 font-medium">ส่งสูงสุด (พ.ย. 68)</div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl flex items-center gap-4 hover:border-amber-500/40 transition-all duration-300 shadow-lg group">
+                <div class="text-2xl p-3.5 bg-amber-500/10 text-amber-400 rounded-2xl group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-amber-400">52.9%</div>
+                    <div class="text-xs text-slate-400 font-medium">เฉลี่ยภาพรวมทั้งปี</div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl flex items-center gap-4 hover:border-pink-500/40 transition-all duration-300 shadow-lg group">
+                <div class="text-2xl p-3.5 bg-pink-500/10 text-pink-400 rounded-2xl group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-pink-400">2 แห่ง</div>
+                    <div class="text-xs text-slate-400 font-medium">ระดับ Top Tier (80%+)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Chart & Interactive Month Details -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Monthly Chart (2 cols) -->
+            <section class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between shadow-xl">
+                <div>
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
+                        <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-area text-sky-400"></i>
+                            แนวโน้มการส่งรายงานรายเดือน (% Submission Rate)
+                        </h2>
+                        <span class="text-xs text-slate-400">คลิกที่เดือนด้านล่างเพื่อสลับข้อมูล</span>
+                    </div>
+                    <div class="h-64 sm:h-72 w-full relative">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Interactive Month Selector Buttons -->
+                <div class="mt-4 pt-4 border-t border-slate-800">
+                    <div class="text-xs text-slate-400 mb-2 font-medium">เลือกเดือนเพื่อดูสถานะการส่งข้อมูลรายแห่ง:</div>
+                    <div class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-12 gap-1.5" id="monthButtons">
+                        <!-- Dynamic Buttons -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Monthly Inspector Drawer (1 col) -->
+            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between shadow-xl">
+                <div>
+                    <div class="flex justify-between items-center pb-3 border-b border-slate-800 mb-4">
+                        <div>
+                            <h3 class="font-bold text-slate-200 text-base" id="selectedMonthTitle">รายละเอียดประจำเดือน</h3>
+                            <p class="text-xs text-slate-400" id="selectedMonthSubtitle">สถานะการส่งข้อมูลย่อย</p>
+                        </div>
+                        <span id="selectedMonthBadge" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                            -- %
+                        </span>
+                    </div>
+
+                    <!-- Mini Summary Status Bar -->
+                    <div class="grid grid-cols-2 gap-2 mb-4">
+                        <div class="bg-emerald-950/40 border border-emerald-500/20 p-2.5 rounded-xl flex items-center gap-3">
+                            <div class="text-lg text-emerald-400"><i class="fa-solid fa-circle-check"></i></div>
+                            <div>
+                                <div class="text-xs text-slate-400">ส่งข้อมูลแล้ว</div>
+                                <div class="text-lg font-bold text-emerald-400" id="countSubmitted">0 แห่ง</div>
+                            </div>
+                        </div>
+                        <div class="bg-rose-950/40 border border-rose-500/20 p-2.5 rounded-xl flex items-center gap-3">
+                            <div class="text-lg text-rose-400"><i class="fa-solid fa-circle-xmark"></i></div>
+                            <div>
+                                <div class="text-xs text-slate-400">ยังไม่ส่งข้อมูล</div>
+                                <div class="text-lg font-bold text-rose-400" id="countNotSubmitted">0 แห่ง</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lists for Selected Month -->
+                    <div class="space-y-3 overflow-y-auto max-h-[300px] pr-1">
+                        <div>
+                            <span class="text-xs font-semibold text-emerald-400 block mb-1 flex items-center gap-1">
+                                <i class="fa-solid fa-check"></i> รายชื่อที่ส่งเรียบร้อย
+                            </span>
+                            <div id="submittedList" class="flex flex-wrap gap-1.5">
+                                <!-- Dynamic List -->
+                            </div>
+                        </div>
+
+                        <div class="pt-2 border-t border-slate-800/60">
+                            <span class="text-xs font-semibold text-rose-400 block mb-1 flex items-center gap-1">
+                                <i class="fa-solid fa-xmark"></i> รายชื่อที่ยังไม่ส่ง
+                            </span>
+                            <div id="notSubmittedList" class="flex flex-wrap gap-1.5">
+                                <!-- Dynamic List -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Facility Leaderboard Section -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-slate-800">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+                        <i class="fa-solid fa-medal text-amber-400"></i>
+                        บอร์ดจัดอันดับผลงานหน่วยบริการ (Facility Leaderboard & Tier Rating)
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-0.5">จัดกลุ่มตามจำนวนเดือนที่ส่งข้อมูลสำเร็จตลอดทั้งปีงบประมาณ</p>
+                </div>
+
+                <!-- Controls: Search, Filter & View Toggle -->
+                <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                    <!-- Search Input -->
+                    <div class="relative flex-1 md:w-48">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-500 text-xs"></i>
+                        <input type="text" id="searchInput" placeholder="ค้นหา รพ.สต..." 
+                            class="w-full pl-8 pr-3 py-1.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-sky-500 transition-colors">
+                    </div>
+
+                    <!-- Filter Dropdown -->
+                    <select id="tierFilter" class="bg-slate-950 border border-slate-800 text-xs text-slate-200 px-3 py-1.5 rounded-xl focus:outline-none focus:border-sky-500 transition-colors">
+                        <option value="ALL">ทุกระดับ Tier</option>
+                        <option value="S">S-Tier (🌟 10-12 เดือน)</option>
+                        <option value="A">A-Tier (👍 9 เดือน)</option>
+                        <option value="B">B-Tier (🆗 7-8 เดือน)</option>
+                        <option value="C">C-Tier (⚡ 5-6 เดือน)</option>
+                        <option value="BOOST">Needs Boost (🚨 1-4 เดือน)</option>
+                    </select>
+
+                    <!-- View Toggle Buttons -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-1 flex gap-1">
+                        <button id="btnViewCards" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-sky-500 text-white transition-all">
+                            <i class="fa-solid fa-layer-group"></i> การ์ดสรุป
+                        </button>
+                        <button id="btnViewTable" class="px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 transition-all">
+                            <i class="fa-solid fa-table-cells"></i> ตารางเมทริกซ์
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View 1: Leaderboard Cards View -->
+            <div id="viewCards" class="space-y-3">
+                <!-- Dynamically Populated -->
+            </div>
+
+            <!-- View 2: Detailed Matrix Table View (Hidden by default) -->
+            <div id="viewTable" class="hidden overflow-x-auto rounded-xl border border-slate-800">
+                <table class="w-full text-left text-xs text-slate-300">
+                    <thead class="bg-slate-950 text-slate-400 border-b border-slate-800 uppercase font-semibold">
+                        <tr>
+                            <th class="p-3">หน่วยบริการ</th>
+                            <th class="p-3 text-center">ระดับ Tier</th>
+                            <th class="p-3 text-center">ส่งทั้งหมด</th>
+                            <th class="p-3 text-center">ต.ค.</th>
+                            <th class="p-3 text-center">พ.ย.</th>
+                            <th class="p-3 text-center">ธ.ค.</th>
+                            <th class="p-3 text-center">ม.ค.</th>
+                            <th class="p-3 text-center">ก.พ.</th>
+                            <th class="p-3 text-center">มี.ค.</th>
+                            <th class="p-3 text-center">เม.ย.</th>
+                            <th class="p-3 text-center">พ.ค.</th>
+                            <th class="p-3 text-center">มิ.ย.</th>
+                            <th class="p-3 text-center">ก.ค.</th>
+                            <th class="p-3 text-center">ส.ค.</th>
+                            <th class="p-3 text-center">ก.ย.</th>
+                        </tr>
+                    </thead>
+                    <tbody id="matrixTableBody" class="divide-y divide-slate-800/60 bg-slate-900/50">
+                        <!-- Dynamically Populated -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Executive Action Recommendations -->
+        <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-6 shadow-xl">
+            <h3 class="text-base font-bold text-slate-100 mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-lightbulb text-amber-400"></i>
+                ข้อเสนอแนะเชิงบริหาร (Executive Action Plan)
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-300">
+                <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800 space-y-1">
+                    <div class="font-semibold text-sky-400 flex items-center gap-2">
+                        <span>1. ระบบแจ้งเตือนอัตโนมัติ</span>
+                    </div>
+                    <p class="text-slate-400 leading-relaxed">ตั้งระบบแจ้งเตือนผ่านไลน์กลุ่มทุกวันที่ 25 ของเดือน ป้องกันการลืมส่ง โดยเฉพาะช่วงกลางปีงบประมาณ (ก.พ. - มิ.ย.) ที่พบสถิติการส่งต่ำ</p>
+                </div>
+
+                <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800 space-y-1">
+                    <div class="font-semibold text-rose-400 flex items-center gap-2">
+                        <span>2. ตรวจสอบคอขวดเดือนเมษายน</span>
+                    </div>
+                    <p class="text-slate-400 leading-relaxed">เร่งตรวจสอบระบบฐานข้อมูล HDC/43 แฟ้ม ย้อนหลังของเดือน เม.ย. 2569 ที่พบอัตราการส่งเป็น 0% เพื่อแก้ไขข้อผิดพลาดทางเทคนิค</p>
+                </div>
+
+                <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800 space-y-1">
+                    <div class="font-semibold text-emerald-400 flex items-center gap-2">
+                        <span>3. โครงการพี่เลี้ยง (Buddy System)</span>
+                    </div>
+                    <p class="text-slate-400 leading-relaxed">สนับสนุนให้ รพ.สต. กลุ่ม S-Tier (เช่น รพ.สต.บ้านโพธิ์น้อย) ร่วมเป็นพี่เลี้ยงให้คำแนะนำแก่กลุ่มที่ต้องเร่งรัดติดตาม (Needs Boost)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-xs text-slate-500 pt-2 pb-6">
+            Data Source: Thai Traditional Medicine Database FY 2026 | Designed for Executive & Multi-Gen Engagement
+        </footer>
+    </div>
+
+    <!-- JavaScript Data & Interactivity -->
+    <script>
+        // Raw Data mapping 20 facilities over 12 months
+        const MONTHS = ['ต.ค. 68', 'พ.ย. 68', 'ธ.ค. 68', 'ม.ค. 69', 'ก.พ. 69', 'มี.ค. 69', 'เม.ย. 69', 'พ.ค. 69', 'มิ.ย. 69', 'ก.ค. 69', 'ส.ค. 69', 'ก.ย. 69'];
+        const SHORT_MONTHS = ['ต.ค.', 'พ.ย.', 'ธ.ค.', 'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.'];
+
+        const FACILITIES = [
+            { id: 1, name: 'รพ.สต.บ้านโพธิ์น้อย', records: [1,1,1,1,1,0,0,1,1,1,1,1] }, // 11
+            { id: 2, name: 'รพ.สต.ขุนหาญ', records: [1,1,1,1,1,1,0,1,0,1,1,1] }, // 10
+            { id: 3, name: 'รพ.สต.บ้านสำโรงเกียรติ', records: [0,1,1,1,1,1,0,1,0,1,1,1] }, // 9
+            { id: 4, name: 'รพ.สต.บ้านกันจด', records: [0,1,1,1,1,0,0,1,0,1,1,1] }, // 9
+            { id: 5, name: 'รพ.ขุนหาญ', records: [1,1,1,1,0,0,0,0,1,1,1,1] }, // 8
+            { id: 6, name: 'รพ.สต.บ้านโพธิ์กระสังข์', records: [0,1,1,1,0,0,0,1,1,1,1,1] }, // 8
+            { id: 7, name: 'รพ.สต.บ้านห้วยจันทร์', records: [0,1,0,1,1,1,0,1,0,1,1,1] }, // 8
+            { id: 8, name: 'รพ.สต.บ้านซำขี้เหล็ก', records: [1,1,1,1,1,1,0,0,0,1,1,0] }, // 8
+            { id: 9, name: 'รพ.สต.บ้านกันตรวจ', records: [1,1,1,1,1,1,0,0,1,0,1,0] }, // 7
+            { id: 10, name: 'รพ.สต.บ้านพรานเหนือ', records: [1,1,1,0,0,1,0,0,1,0,0,1] }, // 6
+            { id: 11, name: 'รพ.สต.บ้านม่วงแยก', records: [1,1,1,0,0,0,0,0,1,0,1,1] }, // 6
+            { id: 12, name: 'รพ.สต.บ้านภูทอง', records: [0,1,1,0,0,0,0,0,1,1,1,1] }, // 6
+            { id: 13, name: 'รพ.สต.ทับทิมสยาม', records: [1,1,1,0,1,1,0,1,0,0,0,1] }, // 7 (Corrected for matrix)
+            { id: 14, name: 'รพ.สต.บ้านกันทรอมเหนือ', records: [0,1,0,0,0,1,0,0,0,1,0,1] }, // 4
+            { id: 15, name: 'รพ.สต.บ้านหนองบัว', records: [0,1,1,0,1,1,0,0,0,0,1,1] }, // 6
+            { id: 16, name: 'รพ.สต.บ้านหลักหิน', records: [0,1,1,0,0,0,0,0,0,0,1,1] }, // 4
+            { id: 17, name: 'รพ.สต.บ้านตานวน', records: [0,1,0,1,0,0,0,0,0,1,1,0] }, // 4
+            { id: 18, name: 'รพ.สต.บ้านซำเขียน', records: [1,1,1,0,0,0,0,0,0,0,0,1] }, // 4
+            { id: 19, name: 'รพ.สต.บ้านโพธิ์วงศ์', records: [1,1,1,0,0,0,0,0,0,0,0,1] }, // 4
+            { id: 20, name: 'รพ.สต.บ้านกราม', records: [1,1,0,0,0,0,0,0,0,0,0,0] }  // 2
+        ];
+
+        // Helper: Calculate total submitted months per facility
+        FACILITIES.forEach(f => {
+            f.total = f.records.reduce((a, b) => a + b, 0);
+            f.percentage = Math.round((f.total / 12) * 100);
+            if (f.total >= 10) {
+                f.tier = 'S';
+                f.tierLabel = 'S-Tier 🌟';
+                f.tierBg = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
+                f.barColor = 'bg-emerald-400';
+            } else if (f.total === 9) {
+                f.tier = 'A';
+                f.tierLabel = 'A-Tier 👍';
+                f.tierBg = 'bg-sky-500/20 text-sky-300 border-sky-500/30';
+                f.barColor = 'bg-sky-400';
+            } else if (f.total >= 7) {
+                f.tier = 'B';
+                f.tierLabel = 'B-Tier 🆗';
+                f.tierBg = 'bg-blue-500/20 text-blue-300 border-blue-500/30';
+                f.barColor = 'bg-blue-400';
+            } else if (f.total >= 5) {
+                f.tier = 'C';
+                f.tierLabel = 'C-Tier ⚡';
+                f.tierBg = 'bg-amber-500/20 text-amber-300 border-amber-500/30';
+                f.barColor = 'bg-amber-400';
+            } else {
+                f.tier = 'BOOST';
+                f.tierLabel = 'Needs Boost 🚨';
+                f.tierBg = 'bg-rose-500/20 text-rose-300 border-rose-500/30';
+                f.barColor = 'bg-rose-500';
+            }
+        });
+
+        // Calculate Monthly Summaries
+        const monthlyStats = MONTHS.map((m, idx) => {
+            const count = FACILITIES.filter(f => f.records[idx] === 1).length;
+            const pct = Math.round((count / FACILITIES.length) * 100);
+            return { monthIndex: idx, name: m, shortName: SHORT_MONTHS[idx], count, notCount: FACILITIES.length - count, pct };
+        });
+
+        let currentSelectedMonth = 1; // Default November (Peak)
+
+        // Init Chart.js
+        let monthlyChart;
+        function initChart() {
+            const ctx = document.getElementById('monthlyChart').getContext('2d');
+            
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(56, 189, 248, 0.3)');
+            gradient.addColorStop(1, 'rgba(56, 189, 248, 0)');
+
+            monthlyChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: SHORT_MONTHS,
+                    datasets: [{
+                        label: 'อัตราการส่งข้อมูล (%)',
+                        data: monthlyStats.map(s => s.pct),
+                        borderColor: '#38bdf8',
+                        borderWidth: 3,
+                        pointBackgroundColor: monthlyStats.map((s, i) => i === currentSelectedMonth ? '#34d399' : '#38bdf8'),
+                        pointRadius: monthlyStats.map((s, i) => i === currentSelectedMonth ? 8 : 5),
+                        pointHoverRadius: 9,
+                        fill: true,
+                        backgroundColor: gradient,
+                        tension: 0.35
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (e, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            selectMonth(index);
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const stat = monthlyStats[context.dataIndex];
+                                    return ` ส่งข้อมูล: ${stat.count}/${FACILITIES.length} แห่ง (${stat.pct}%)`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 100,
+                            ticks: { color: '#94a3b8', callback: v => v + '%' },
+                            grid: { color: 'rgba(51, 65, 85, 0.4)' }
+                        },
+                        x: {
+                            ticks: { color: '#cbd5e1', font: { family: 'Prompt' } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Render Month Buttons
+        function renderMonthButtons() {
+            const container = document.getElementById('monthButtons');
+            container.innerHTML = '';
+
+            monthlyStats.forEach((s, idx) => {
+                const btn = document.createElement('button');
+                const isSelected = idx === currentSelectedMonth;
+                btn.className = `p-2 rounded-xl text-center border transition-all ${
+                    isSelected 
+                    ? 'bg-sky-500 border-sky-400 text-white shadow-lg shadow-sky-500/20 font-bold scale-105' 
+                    : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
+                }`;
+                btn.onclick = () => selectMonth(idx);
+
+                btn.innerHTML = `
+                    <div class="text-[10px] opacity-80">${s.shortName}</div>
+                    <div class="text-xs font-bold ${isSelected ? 'text-white' : s.pct === 0 ? 'text-rose-400' : 'text-sky-400'}">${s.pct}%</div>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        // Select Month Event Handler
+        function selectMonth(idx) {
+            currentSelectedMonth = idx;
+            const stat = monthlyStats[idx];
+
+            document.getElementById('selectedMonthTitle').innerText = `เดือน${MONTHS[idx]}`;
+            document.getElementById('selectedMonthSubtitle').innerText = `ภาพรวมการส่งรายงานประจำเดือน`;
+            document.getElementById('selectedMonthBadge').innerText = `${stat.pct}% (${stat.count}/${FACILITIES.length})`;
+            
+            document.getElementById('countSubmitted').innerText = `${stat.count} แห่ง`;
+            document.getElementById('countNotSubmitted').innerText = `${stat.notCount} แห่ง`;
+
+            // Filter Facility Lists
+            const submitted = FACILITIES.filter(f => f.records[idx] === 1);
+            const notSubmitted = FACILITIES.filter(f => f.records[idx] === 0);
+
+            const subContainer = document.getElementById('submittedList');
+            subContainer.innerHTML = submitted.length > 0 ? '' : '<span class="text-xs text-slate-500">ไม่มีข้อมูล</span>';
+            submitted.forEach(f => {
+                subContainer.innerHTML += `
+                    <span class="px-2 py-1 rounded-lg bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 text-[11px]">
+                        ${f.name}
+                    </span>`;
+            });
+
+            const notSubContainer = document.getElementById('notSubmittedList');
+            notSubContainer.innerHTML = notSubmitted.length > 0 ? '' : '<span class="text-xs text-slate-500">ส่งครบทุกแห่ง 🎉</span>';
+            notSubmitted.forEach(f => {
+                notSubContainer.innerHTML += `
+                    <span class="px-2 py-1 rounded-lg bg-rose-950/60 border border-rose-500/30 text-rose-300 text-[11px]">
+                        ${f.name}
+                    </span>`;
+            });
+
+            // Update Chart Highlights
+            if (monthlyChart) {
+                monthlyChart.data.datasets[0].pointBackgroundColor = monthlyStats.map((s, i) => i === currentSelectedMonth ? '#34d399' : '#38bdf8');
+                monthlyChart.data.datasets[0].pointRadius = monthlyStats.map((s, i) => i === currentSelectedMonth ? 8 : 5);
+                monthlyChart.update();
+            }
+
+            renderMonthButtons();
+        }
+
+        // Render Leaderboard Cards
+        function renderLeaderboard() {
+            const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+            const selectedTier = document.getElementById('tierFilter').value;
+
+            const filtered = FACILITIES.filter(f => {
+                const matchesSearch = f.name.toLowerCase().includes(searchQuery);
+                const matchesTier = selectedTier === 'ALL' || f.tier === selectedTier;
+                return matchesSearch && matchesTier;
+            });
+
+            const cardsContainer = document.getElementById('viewCards');
+            cardsContainer.innerHTML = filtered.length > 0 ? '' : '<div class="text-center py-8 text-slate-500 text-xs">ไม่พบข้อมูลตรงตามเงื่อนไข</div>';
+
+            filtered.forEach(f => {
+                cardsContainer.innerHTML += `
+                    <div class="bg-slate-950/70 border border-slate-800 p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-3 hover:border-slate-700 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-lg text-xs font-bold border ${f.tierBg}">
+                                ${f.tierLabel}
+                            </span>
+                            <span class="font-medium text-slate-100 text-sm">${f.name}</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-4 w-full md:w-1/2">
+                            <div class="flex-1 bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                                <div class="${f.barColor} h-full rounded-full transition-all duration-500" style="width: ${f.percentage}%"></div>
+                            </div>
+                            <span class="text-xs font-bold text-slate-300 w-24 text-right">
+                                ${f.total}/12 เดือน <span class="text-slate-500 font-normal">(${f.percentage}%)</span>
+                            </span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Render Table Matrix View
+            const tableBody = document.getElementById('matrixTableBody');
+            tableBody.innerHTML = filtered.length > 0 ? '' : '<tr><td colspan="15" class="p-4 text-center text-slate-500">ไม่พบข้อมูล</td></tr>';
+
+            filtered.forEach(f => {
+                let monthsHtml = f.records.map(r => 
+                    r === 1 
+                    ? `<td class="p-2.5 text-center text-emerald-400 font-bold"><i class="fa-solid fa-check"></i></td>`
+                    : `<td class="p-2.5 text-center text-rose-500 opacity-60"><i class="fa-solid fa-xmark"></i></td>`
+                ).join('');
+
+                tableBody.innerHTML += `
+                    <tr class="hover:bg-slate-800/40 transition-colors">
+                        <td class="p-3 font-medium text-slate-200">${f.name}</td>
+                        <td class="p-3 text-center"><span class="px-2 py-0.5 text-[10px] rounded border ${f.tierBg}">${f.tier}</span></td>
+                        <td class="p-3 text-center font-bold text-sky-400">${f.total}/12</td>
+                        ${monthsHtml}
+                    </tr>
+                `;
+            });
+        }
+
+        // Setup View Toggles & Search Listeners
+        document.getElementById('btnViewCards').onclick = function() {
+            document.getElementById('viewCards').classList.remove('hidden');
+            document.getElementById('viewTable').classList.add('hidden');
+            this.classList.add('bg-sky-500', 'text-white');
+            this.classList.remove('text-slate-400');
+            document.getElementById('btnViewTable').classList.remove('bg-sky-500', 'text-white');
+            document.getElementById('btnViewTable').classList.add('text-slate-400');
+        };
+
+        document.getElementById('btnViewTable').onclick = function() {
+            document.getElementById('viewTable').classList.remove('hidden');
+            document.getElementById('viewCards').classList.add('hidden');
+            this.classList.add('bg-sky-500', 'text-white');
+            this.classList.remove('text-slate-400');
+            document.getElementById('btnViewCards').classList.remove('bg-sky-500', 'text-white');
+            document.getElementById('btnViewCards').classList.add('text-slate-400');
+        };
+
+        document.getElementById('searchInput').addEventListener('input', renderLeaderboard);
+        document.getElementById('tierFilter').addEventListener('change', renderLeaderboard);
+
+        // Page Onload Init
+        window.onload = function() {
+            initChart();
+            selectMonth(1); // Default November
+            renderLeaderboard();
+        };
+    </script>
+</body>
+</html>
